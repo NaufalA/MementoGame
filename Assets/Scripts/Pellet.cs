@@ -13,36 +13,44 @@ public class Pellet : MonoBehaviour
 
     private bool isFriendly;
 
+    private float initialGravityScale;
+
+    private void Awake()
+    {
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        initialGravityScale = rb.gravityScale;
+    }
+
     private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
     {
         isFriendly = false;
         gameObject.GetComponent<SpriteRenderer>().color = colorHostile;
+        rb.gravityScale = initialGravityScale;
     }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            if (col.gameObject.GetComponent<PlayerMovement>().IsGrounded())
+            if (isFriendly)
             {
-                if (isFriendly)
-                {
-                    Collect();
-                }
-                else
-                {
-                    Hit();
-                }
+                Collect();
             }
             else
             {
-                TurnFriendly();
+                if (col.gameObject.GetComponent<PlayerMovement>().IsGrounded())
+                {
+                    Hit();
+                }
+                else
+                {
+                    TurnFriendly();
+                }
             }
         }
         else if (col.gameObject.layer == LayerMask.NameToLayer("Ground"))
@@ -60,7 +68,7 @@ public class Pellet : MonoBehaviour
     private void TurnFriendly()
     {
         gameObject.GetComponent<SpriteRenderer>().color = colorFriendly;
-        rb.gravityScale = 0;
+        rb.gravityScale = 0f;
         isFriendly = true;
     }
 
