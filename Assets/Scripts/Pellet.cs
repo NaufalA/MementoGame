@@ -10,6 +10,7 @@ public class Pellet : MonoBehaviour
     public Color colorHostile = Color.red;
     public Color colorFriendly = Color.green;
     public GameManager gameManager;
+    public SpriteRenderer sprite;
 
     private bool isFriendly;
 
@@ -29,7 +30,7 @@ public class Pellet : MonoBehaviour
     private void OnEnable()
     {
         isFriendly = false;
-        gameObject.GetComponent<SpriteRenderer>().color = colorHostile;
+        sprite.color = colorHostile;
         rb.gravityScale = initialGravityScale;
     }
 
@@ -67,7 +68,7 @@ public class Pellet : MonoBehaviour
 
     private void TurnFriendly()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = colorFriendly;
+        sprite.color = colorFriendly;
         rb.gravityScale = 0f;
         isFriendly = true;
     }
